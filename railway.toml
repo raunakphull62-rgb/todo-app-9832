@@ -1,0 +1,33 @@
+[env]
+DATABASE_URL = ${DATABASE_URL}
+SUPABASE_KEY = ${SUPABASE_KEY}
+SUPABASE_URL = ${SUPABASE_URL}
+SECRET_KEY = ${SECRET_KEY}
+
+[variables]
+DATABASE_URL = "postgresql://user:password@localhost:5432/database"
+SUPABASE_KEY = "your-supabase-key"
+SUPABASE_URL = "https://your-supabase-url.supabase.co"
+SECRET_KEY = "your-secret-key"
+
+[build]
+command = "poetry build"
+image = "python:3.10-slim"
+
+[deploy]
+env = "production"
+region = "us"
+platform = "python"
+
+[services]
+web = {
+  build = "."
+  command = "uvicorn main:app --host 0.0.0.0 --port 8000"
+  ports = ["8000:8000"]
+  environment = {
+    DATABASE_URL = ${DATABASE_URL}
+    SUPABASE_KEY = ${SUPABASE_KEY}
+    SUPABASE_URL = ${SUPABASE_URL}
+    SECRET_KEY = ${SECRET_KEY}
+  }
+}
